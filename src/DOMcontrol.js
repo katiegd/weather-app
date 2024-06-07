@@ -1,9 +1,5 @@
 import { head } from "lodash";
-import {
-  getWeatherData,
-  weatherConditionsMap,
-  getWeatherForecast,
-} from "./weather";
+import { getWeatherData, weatherConditionsMap } from "./weather";
 import searchIcon from "./assets/search.svg";
 import beeIcon from "./assets/bee.svg";
 import beeIconNight from "./assets/bee-night.svg";

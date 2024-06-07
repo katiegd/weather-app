@@ -19,7 +19,7 @@ import windy from "./assets/windy.svg";
 export async function getWeatherData(location) {
   try {
     const response = await fetch(
-      `http://api.weatherapi.com/v1/forecast.json?key=3af326277f9b4956958210506240306&q=${location}&days=6&aqi=no&alerts=no`,
+      `https://api.weatherapi.com/v1/forecast.json?key=3af326277f9b4956958210506240306&q=${location}&days=6&aqi=no&alerts=no`,
 
       { mode: "cors" }
     );
@@ -84,37 +84,6 @@ export async function getWeatherData(location) {
       minTempF,
       forecastDays,
     };
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-export async function getWeatherForecast(location) {
-  try {
-    const response = await fetch(
-      `http://api.weatherapi.com/v1/forecast.json?key=3af326277f9b4956958210506240306&q=${location}&days=5&aqi=no&alerts=no`,
-      { mode: "cors" }
-    );
-    const forecastData = await response.json();
-    const forecastDays = forecastData.forecast.forecastday;
-    forecastDays.forEach((day) => {
-      const date = day.date;
-      const formattedDate = formatDate(date);
-      const maxTempF = day.day.maxtemp_f;
-      const maxTempC = day.day.maxtemp_c;
-      const minTempF = day.day.mintemp_f;
-      const minTempC = day.day.mintemp_c;
-      const condition = day.day.condition.text;
-
-      return {
-        formattedDate,
-        maxTempF,
-        maxTempC,
-        minTempF,
-        minTempC,
-        condition,
-      };
-    });
   } catch (error) {
     console.log(error);
   }
