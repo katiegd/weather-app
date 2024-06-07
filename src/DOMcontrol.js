@@ -1,22 +1,18 @@
 import { head } from "lodash";
-import { getWeatherData } from "./weather";
+import {
+  getWeatherData,
+  weatherConditionsMap,
+  getWeatherForecast,
+} from "./weather";
 import searchIcon from "./assets/search.svg";
 import beeIcon from "./assets/bee.svg";
-import sunny from "./assets/sunny.svg";
-import clearNight from "./assets/clear-night.svg";
-import cloudy from "./assets/cloudy.svg";
-import foggy from "./assets/foggy.svg";
 import partlyCloudyDay from "./assets/partly-cloudy-day.svg";
-import partlyCloudyNight from "./assets/partly-cloudy-night.svg";
-import rain from "./assets/rain.svg";
-import snowing1 from "./assets/snowing.svg";
-import snowing2 from "./assets/snowy2.svg";
-import storm from "./assets/storm.svg";
-import windy from "./assets/windy.svg";
 
 export function DOMcontrol() {
+  // Store current weather data
   let currentWeatherData = null;
 
+  // Setup HTML elements
   const mainContainer = document.querySelector("#main-container");
   const headerContainer = document.querySelector(".header");
 
@@ -62,7 +58,7 @@ export function DOMcontrol() {
 
   const cButton = document.createElement("p");
   cButton.setAttribute("class", "celsius-btn");
-  cButton.textContent = "°C/kmph";
+  cButton.textContent = "°C/kph";
 
   const weatherContainer = document.createElement("div");
   weatherContainer.classList.add("weather-container");
@@ -87,8 +83,10 @@ export function DOMcontrol() {
   mainContainer.appendChild(degressContainer);
   mainContainer.appendChild(weatherContainer);
 
+  // Toggle for metric and imperial conversions
   metricToggle.addEventListener("click", handleMetricToggle);
 
+  // Event listeners for location inputs
   locationSubmit.addEventListener("click", handleInputSubmit);
   locationInput.addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
@@ -96,6 +94,7 @@ export function DOMcontrol() {
     }
   });
 
+  // Input submit handler. Grabs location input and passes through getWeatherData. Sets currentWeatherData to weatherData & renders the page with weatherData.
   function handleInputSubmit() {
     const locationInputText = locationInput.value;
     getWeatherData(locationInputText).then((weatherData) => {
@@ -104,6 +103,7 @@ export function DOMcontrol() {
     });
   }
 
+  // Sets classes based on state of the toggle
   function handleMetricToggle() {
     if (metricToggle.checked === true) {
       metricToggleCircle.style.left = "20px";
@@ -119,12 +119,49 @@ export function DOMcontrol() {
     }
   }
 
+  function getWeatherConditionStyle(condition, isDay) {
+    const timeOfDay = isDay ? "day" : "night";
+    return (
+      weatherConditionsMap[condition]?.[timeOfDay] || {
+        image: partlyCloudyDay,
+      }
+    );
+  }
+
+  // Render elements of weather data based on location
   function renderWeather(weatherData) {
     weatherContainer.innerHTML = "";
 
+    const { condition, isDay } = weatherData;
+    const { image } = getWeatherConditionStyle(condition, isDay);
+
+    if (isDay === 0) {
+      document.body.classList.add("night-mode");
+      headerName.classList.add("night-mode");
+      locationContainer.classList.add("night-mode");
+      locationInput.classList.add("night-mode");
+      locationSubmit.classList.add("night-mode");
+      degressContainer.classList.add("night-mode");
+      fButton.classList.add("night-mode");
+      cButton.classList.add("night-mode");
+      toggleLabel.classList.add("night-mode");
+      weatherContainer.classList.add("night-mode");
+    } else {
+      document.body.classList.remove("night-mode");
+      headerName.classList.remove("night-mode");
+      locationContainer.classList.remove("night-mode");
+      locationInput.classList.remove("night-mode");
+      locationSubmit.classList.remove("night-mode");
+      degressContainer.classList.remove("night-mode");
+      fButton.classList.remove("night-mode");
+      cButton.classList.remove("night-mode");
+      toggleLabel.classList.remove("night-mode");
+      weatherContainer.classList.remove("night-mode");
+    }
+
     const conditionsImage = document.createElement("img");
     conditionsImage.setAttribute("width", "130px");
-    conditionsImage.src = sunny;
+    conditionsImage.src = image;
 
     const locationInfoContainer = document.createElement("div");
     locationInfoContainer.classList.add("location-info-container");
@@ -158,21 +195,36 @@ export function DOMcontrol() {
     const conditionsDetailsContainer = document.createElement("div");
     conditionsDetailsContainer.classList.add("conditions-details-container");
 
+    const conditionsDetailsCategory = document.createElement("div");
+    conditionsDetailsCategory.classList.add("conditions-details-category");
+
+    const feelsLikeCategory = document.createElement("p");
+    feelsLikeCategory.textContent = "Feels Like:";
+
+    const humidityCategory = document.createElement("p");
+    humidityCategory.textContent = "Humidity:";
+
+    const windCategory = document.createElement("p");
+    windCategory.textContent = "Wind:";
+
+    const conditionsDetailsData = document.createElement("div");
+    conditionsDetailsData.classList.add("conditions-details-data");
+
     const feelsLike = document.createElement("p");
     if (metricToggle.checked === true) {
-      feelsLike.textContent = `Feels Like: ${weatherData.feelsLikeC} °C`;
+      feelsLike.textContent = `${weatherData.feelsLikeC} °C`;
     } else {
-      feelsLike.textContent = `Feels Like: ${weatherData.feelsLikeF} °F`;
+      feelsLike.textContent = `${weatherData.feelsLikeF} °F`;
     }
 
     const humidity = document.createElement("p");
-    humidity.textContent = `Humidity: ${weatherData.humidity}%`;
+    humidity.textContent = `${weatherData.humidity}%`;
 
     const wind = document.createElement("p");
     if (metricToggle.checked === true) {
-      wind.textContent = `Wind: ${weatherData.windKph}kmph ${weatherData.windDirection}`;
+      wind.textContent = `${weatherData.windKph}kph ${weatherData.windDirection}`;
     } else {
-      wind.textContent = `Wind: ${weatherData.windMph}mph ${weatherData.windDirection}`;
+      wind.textContent = `${weatherData.windMph}mph ${weatherData.windDirection}`;
     }
 
     locationInfoContainer.appendChild(locationHeader);
@@ -181,9 +233,16 @@ export function DOMcontrol() {
     conditionsTextContainer.appendChild(temperatureText);
     conditionsTextContainer.appendChild(conditions);
 
-    conditionsDetailsContainer.appendChild(feelsLike);
-    conditionsDetailsContainer.appendChild(humidity);
-    conditionsDetailsContainer.appendChild(wind);
+    conditionsDetailsCategory.appendChild(feelsLikeCategory);
+    conditionsDetailsCategory.appendChild(humidityCategory);
+    conditionsDetailsCategory.appendChild(windCategory);
+
+    conditionsDetailsData.appendChild(feelsLike);
+    conditionsDetailsData.appendChild(humidity);
+    conditionsDetailsData.appendChild(wind);
+
+    conditionsDetailsContainer.appendChild(conditionsDetailsCategory);
+    conditionsDetailsContainer.appendChild(conditionsDetailsData);
 
     conditionsContainer.appendChild(conditionsImage);
     conditionsContainer.appendChild(conditionsTextContainer);
@@ -193,6 +252,7 @@ export function DOMcontrol() {
     weatherContainer.appendChild(conditionsContainer);
   }
 
+  // Renders a default location on page load
   function renderDefaultPage() {
     let location = "Raleigh";
     getWeatherData(location).then((weatherData) => {
@@ -201,4 +261,6 @@ export function DOMcontrol() {
     });
   }
   renderDefaultPage();
+  let location = "Raleigh";
+  getWeatherForecast(location);
 }

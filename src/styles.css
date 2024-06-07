@@ -7,6 +7,11 @@
   --bright-color: #efefef;
   --secondary-color: #d3c69f;
   --background-color: #83b4ff;
+
+  --night-background: #0a2041;
+  --night-text: #5679ac;
+  --night-text-dark: #141a22;
+  --night-gray: #ececec19;
 }
 
 .quicksand-semibold {
@@ -132,6 +137,7 @@ input[type="checkbox"] {
 
 .weather-container {
   width: 50%;
+  min-width: 475px;
   margin-top: 50px;
   padding: 50px;
   border-radius: 3rem;
@@ -164,8 +170,8 @@ input[type="checkbox"] {
   padding-top: 20px;
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
-  justify-items: center;
   align-items: center;
+  justify-items: center;
   gap: 20px;
 }
 
@@ -184,7 +190,106 @@ input[type="checkbox"] {
 }
 
 .conditions-details-container {
-  text-align: right;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  display: flex;
   line-height: 2rem;
+  justify-items: end;
+}
+
+.conditions-details-data {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: right;
+}
+
+/* Night Mode */
+
+body.night-mode {
+  background: linear-gradient(to top, #000000, #151c28);
+  margin: 0;
+  padding: 0;
+}
+
+header.night-mode {
+  color: var(--night-text);
+}
+
+.location-input.night-mode {
+  font-family: "Quicksand", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--night-text);
+  padding: 3px 15px;
+  background-color: var(--night-gray);
+  box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.288);
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  height: 2rem;
+}
+
+.submitBtn.night-mode {
+  border: none;
+  background-color: var(--night-gray);
+  box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.288);
+  padding: 8px;
+  border-radius: 50%;
+}
+
+.submitBtn.night-mode:hover {
+  border: none;
+  background-color: var(--night-text);
+  box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.288);
+  padding: 8px;
+  border-radius: 50%;
+}
+
+.farenheit-btn.night-mode,
+.celsius-btn.night-mode {
+  font-family: "Quicksand", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--night-gray);
+  border: none;
+  padding: 10px;
+}
+
+.active.night-mode {
+  color: var(--night-text);
+  transition: 0.3s;
+}
+
+.metric-toggle.night-mode {
+  width: 40px;
+  height: 20px;
+  background-color: var(--night-gray);
+  display: block;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+}
+
+.circle.night-mode {
+  position: absolute;
+  left: 0px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin: 4px;
+  background-color: var(--background-color);
+  transition: 0.3s;
+}
+
+.weather-container.night-mode {
+  width: 50%;
+  min-width: 475px;
+  margin-top: 50px;
+  padding: 50px;
+  border-radius: 3rem;
+  background-color: var(--night-gray);
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.104);
+  font-family: "Quicksand";
+  color: var(--night-text);
+  display: grid;
+  grid-template-rows: 1fr 3fr;
 }
