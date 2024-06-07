@@ -44,7 +44,24 @@ export async function getWeatherData(location) {
     const minTempC = weatherData.forecast.forecastday[0].day.mintemp_c;
     const minTempF = weatherData.forecast.forecastday[0].day.mintemp_f;
 
-    console.log(weatherData);
+    const forecastDays = weatherData.forecast.forecastday.map((day) => {
+      const date = day.date;
+      const formattedDate = formatDate(date);
+      const maxTempF = day.day.maxtemp_f;
+      const maxTempC = day.day.maxtemp_c;
+      const minTempF = day.day.mintemp_f;
+      const minTempC = day.day.mintemp_c;
+      const condition = day.day.condition.text;
+
+      return {
+        formattedDate,
+        maxTempF,
+        maxTempC,
+        minTempF,
+        minTempC,
+        condition,
+      };
+    });
 
     return {
       tempF,
@@ -65,6 +82,7 @@ export async function getWeatherData(location) {
       maxTempF,
       minTempC,
       minTempF,
+      forecastDays,
     };
   } catch (error) {
     console.log(error);
@@ -81,20 +99,46 @@ export async function getWeatherForecast(location) {
     const forecastDays = forecastData.forecast.forecastday;
     forecastDays.forEach((day) => {
       const date = day.date;
+      const formattedDate = formatDate(date);
       const maxTempF = day.day.maxtemp_f;
       const maxTempC = day.day.maxtemp_c;
       const minTempF = day.day.mintemp_f;
       const minTempC = day.day.mintemp_c;
       const condition = day.day.condition.text;
+
+      return {
+        formattedDate,
+        maxTempF,
+        maxTempC,
+        minTempF,
+        minTempC,
+        condition,
+      };
     });
   } catch (error) {
     console.log(error);
   }
 }
 
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate() + 1).padStart(2, "0");
+
+  return `${month}/${day}`;
+}
+
 // Object map containing different styles based on weather/time of day.
 export const weatherConditionsMap = {
   Sunny: {
+    day: {
+      image: sunny,
+    },
+    night: {
+      image: clearNight,
+    },
+  },
+  Clear: {
     day: {
       image: sunny,
     },
@@ -138,6 +182,33 @@ export const weatherConditionsMap = {
     },
   },
   "Patchy rain possible": {
+    day: {
+      image: rain,
+      background: "linear-gradient(to top, #e2ffe3, #000",
+    },
+    night: {
+      image: rainNight,
+    },
+  },
+  "Heavy rain": {
+    day: {
+      image: rain,
+      background: "linear-gradient(to top, #e2ffe3, #000",
+    },
+    night: {
+      image: rainNight,
+    },
+  },
+  "Moderate rain": {
+    day: {
+      image: rain,
+      background: "linear-gradient(to top, #e2ffe3, #000",
+    },
+    night: {
+      image: rainNight,
+    },
+  },
+  "Patchy rain nearby": {
     day: {
       image: rain,
       background: "linear-gradient(to top, #e2ffe3, #000",

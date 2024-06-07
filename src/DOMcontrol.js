@@ -6,6 +6,7 @@ import {
 } from "./weather";
 import searchIcon from "./assets/search.svg";
 import beeIcon from "./assets/bee.svg";
+import beeIconNight from "./assets/bee-night.svg";
 import partlyCloudyDay from "./assets/partly-cloudy-day.svg";
 
 export function DOMcontrol() {
@@ -27,6 +28,7 @@ export function DOMcontrol() {
 
   const locationInput = document.createElement("input");
   locationInput.setAttribute("type", "text");
+  locationInput.setAttribute("placeholder", "City, State, ZIP code...");
   locationInput.classList.add("location-input");
 
   const locationSubmit = document.createElement("img");
@@ -146,6 +148,7 @@ export function DOMcontrol() {
       cButton.classList.add("night-mode");
       toggleLabel.classList.add("night-mode");
       weatherContainer.classList.add("night-mode");
+      header.src = beeIconNight;
     } else {
       document.body.classList.remove("night-mode");
       headerName.classList.remove("night-mode");
@@ -157,6 +160,7 @@ export function DOMcontrol() {
       cButton.classList.remove("night-mode");
       toggleLabel.classList.remove("night-mode");
       weatherContainer.classList.remove("night-mode");
+      header.src = beeIcon;
     }
 
     const conditionsImage = document.createElement("img");
@@ -192,9 +196,24 @@ export function DOMcontrol() {
     conditions.classList.add("conditions-text");
     conditions.textContent = weatherData.condition;
 
-    const maxMinTemp = document.createElement("p");
-    maxMinTemp.classList.add("max-min-temp");
-    maxMinTemp.textContent = `Hi: ${weatherData.maxTempF}°F, Low: ${weatherData.minTempF}°F`;
+    const maxMinTempContainer = document.createElement("div");
+    maxMinTempContainer.classList.add("max-min-temp-container");
+
+    const maxMinTempHi = document.createElement("p");
+    maxMinTempHi.classList.add("max-min-temp");
+    if (metricToggle.checked === true) {
+      maxMinTempHi.textContent = `High: ${weatherData.maxTempC}°C`;
+    } else {
+      maxMinTempHi.textContent = `High: ${weatherData.maxTempF}°F`;
+    }
+
+    const maxMinTempLow = document.createElement("p");
+    maxMinTempLow.classList.add("max-min-temp");
+    if (metricToggle.checked === true) {
+      maxMinTempLow.textContent = `Low: ${weatherData.minTempC}°C`;
+    } else {
+      maxMinTempLow.textContent = `Low: ${weatherData.minTempF}°F`;
+    }
 
     const conditionsDetailsContainer = document.createElement("div");
     conditionsDetailsContainer.classList.add("conditions-details-container");
@@ -231,12 +250,68 @@ export function DOMcontrol() {
       wind.textContent = `${weatherData.windMph}mph ${weatherData.windDirection}`;
     }
 
+    const forecastContainer = document.createElement("div");
+    forecastContainer.classList.add("forecast-container");
+
+    // Get forecast and ignore present day
+    const forecastData = weatherData.forecastDays.slice(1, 7);
+    forecastData.forEach((day) => {
+      const forecastItem = document.createElement("div");
+      forecastItem.classList.add("forecast-item");
+      const conditionIcon = document.createElement("img");
+      conditionIcon.classList.add("forecast-icon");
+      const condition = day.condition;
+      const isDay = 1;
+      const { image } = getWeatherConditionStyle(condition, isDay);
+      conditionIcon.src = image;
+
+      const date = document.createElement("p");
+      date.classList.add("forecast-date");
+      date.textContent = day.formattedDate;
+
+      const conditionText = document.createElement("p");
+      conditionText.classList.add("forecast-condition");
+      conditionText.textContent = condition;
+
+      const tempHighLowContainer = document.createElement("div");
+      tempHighLowContainer.classList.add("temp-high-low-container");
+
+      const tempHigh = document.createElement("p");
+      tempHigh.classList.add("forecast-temp");
+      if (metricToggle.checked === true) {
+        tempHigh.textContent = `H: ${day.maxTempC} °C`;
+      } else {
+        tempHigh.textContent = `H: ${day.maxTempF} °F`;
+      }
+
+      const tempLow = document.createElement("p");
+      tempLow.classList.add("forecast-temp");
+      if (metricToggle.checked === true) {
+        tempLow.textContent = `H: ${day.minTempC} °C`;
+      } else {
+        tempLow.textContent = `L: ${day.minTempF} °F`;
+      }
+
+      tempHighLowContainer.appendChild(tempHigh);
+      tempHighLowContainer.appendChild(tempLow);
+
+      forecastItem.appendChild(date);
+      forecastItem.appendChild(conditionIcon);
+      forecastItem.appendChild(conditionText);
+      forecastItem.appendChild(tempHighLowContainer);
+
+      forecastContainer.appendChild(forecastItem);
+    });
+
     locationInfoContainer.appendChild(locationHeader);
     locationInfoContainer.appendChild(locationCountry);
 
+    maxMinTempContainer.appendChild(maxMinTempHi);
+    maxMinTempContainer.appendChild(maxMinTempLow);
+
     conditionsTextContainer.appendChild(temperatureText);
     conditionsTextContainer.appendChild(conditions);
-    conditionsTextContainer.appendChild(maxMinTemp);
+    conditionsTextContainer.appendChild(maxMinTempContainer);
 
     conditionsDetailsCategory.appendChild(feelsLikeCategory);
     conditionsDetailsCategory.appendChild(humidityCategory);
@@ -255,6 +330,7 @@ export function DOMcontrol() {
 
     weatherContainer.appendChild(locationInfoContainer);
     weatherContainer.appendChild(conditionsContainer);
+    weatherContainer.appendChild(forecastContainer);
   }
 
   // Renders a default location on page load
