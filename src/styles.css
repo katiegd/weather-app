@@ -20,16 +20,23 @@
   font-weight: 500;
   font-style: normal;
 }
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
 
 body {
   background: linear-gradient(to top, #e2ffe3, var(--background-color));
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   margin: 0;
   padding: 0;
 }
 
 #main-container {
-  height: 100vh;
   display: flex;
+  overflow: auto;
   flex-direction: column;
   align-items: center;
 }
@@ -143,6 +150,7 @@ input[type="checkbox"] {
   width: 50%;
   min-width: 475px;
   margin-top: 50px;
+  margin-bottom: 10%;
   padding: 50px;
   border-radius: 3rem;
   background-color: rgba(255, 255, 255, 0.232);
@@ -252,6 +260,8 @@ input[type="checkbox"] {
 
 body.night-mode {
   background: linear-gradient(to top, #000000, #151c28);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   margin: 0;
   padding: 0;
 }
