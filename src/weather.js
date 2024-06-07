@@ -5,7 +5,6 @@ export async function getWeatherData(location) {
       { mode: "cors" }
     );
     const weatherData = await response.json();
-    console.log(weatherData);
 
     const locationName = weatherData.location.name;
     const locationRegion = weatherData.location.region;
@@ -18,6 +17,8 @@ export async function getWeatherData(location) {
     const windMph = weatherData.current.wind_mph;
     const windKph = weatherData.current.wind_kph;
     const condition = weatherData.current.condition.text;
+    const lastUpdated = weatherData.current.last_updated;
+    const humidity = weatherData.current.humidity;
 
     return {
       tempF,
@@ -31,6 +32,8 @@ export async function getWeatherData(location) {
       windDirection,
       windMph,
       windKph,
+      lastUpdated,
+      humidity,
     };
   } catch (error) {
     console.log(error);

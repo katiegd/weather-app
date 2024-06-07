@@ -15,6 +15,8 @@ import storm from "./assets/storm.svg";
 import windy from "./assets/windy.svg";
 
 export function DOMcontrol() {
+  let currentWeatherData = null;
+
   const mainContainer = document.querySelector("#main-container");
   const headerContainer = document.querySelector(".header");
 
@@ -39,18 +41,39 @@ export function DOMcontrol() {
   const degressContainer = document.createElement("div");
   degressContainer.classList.add("degrees-container");
 
-  const fButton = document.createElement("button");
+  const fButton = document.createElement("p");
   fButton.setAttribute("class", "farenheit-btn");
-  fButton.textContent = "°F";
+  fButton.classList.add("active");
+  fButton.textContent = "°F/mph";
 
-  const cButton = document.createElement("button");
+  const toggleDiv = document.createElement("div");
+  toggleDiv.setAttribute("class", "metric-toggle-container");
+
+  const toggleLabel = document.createElement("label");
+  toggleLabel.setAttribute("class", "metric-toggle");
+
+  const metricToggle = document.createElement("input");
+  metricToggle.setAttribute("type", "checkbox");
+  metricToggle.checked = false;
+  metricToggle.setAttribute("id", "metric-toggle");
+
+  const metricToggleCircle = document.createElement("div");
+  metricToggleCircle.setAttribute("class", "circle");
+
+  const cButton = document.createElement("p");
   cButton.setAttribute("class", "celsius-btn");
-  cButton.textContent = "°C";
+  cButton.textContent = "°C/kmph";
 
   const weatherContainer = document.createElement("div");
   weatherContainer.classList.add("weather-container");
 
+  toggleLabel.appendChild(metricToggle);
+  toggleLabel.appendChild(metricToggleCircle);
+
+  toggleDiv.appendChild(toggleLabel);
+
   degressContainer.appendChild(fButton);
+  degressContainer.appendChild(toggleDiv);
   degressContainer.appendChild(cButton);
 
   locationContainer.appendChild(locationInput);
@@ -64,6 +87,8 @@ export function DOMcontrol() {
   mainContainer.appendChild(degressContainer);
   mainContainer.appendChild(weatherContainer);
 
+  metricToggle.addEventListener("click", handleMetricToggle);
+
   locationSubmit.addEventListener("click", handleInputSubmit);
   locationInput.addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
@@ -74,36 +99,105 @@ export function DOMcontrol() {
   function handleInputSubmit() {
     const locationInputText = locationInput.value;
     getWeatherData(locationInputText).then((weatherData) => {
+      currentWeatherData = weatherData;
       renderWeather(weatherData);
     });
+  }
+
+  function handleMetricToggle() {
+    if (metricToggle.checked === true) {
+      metricToggleCircle.style.left = "20px";
+      cButton.classList.add("active");
+      fButton.classList.remove("active");
+    } else {
+      metricToggleCircle.style.left = "0px";
+      fButton.classList.add("active");
+      cButton.classList.remove("active");
+    }
+    if (currentWeatherData) {
+      renderWeather(currentWeatherData);
+    }
   }
 
   function renderWeather(weatherData) {
     weatherContainer.innerHTML = "";
 
     const conditionsImage = document.createElement("img");
-    conditionsImage.setAttribute("width", "80%");
+    conditionsImage.setAttribute("width", "130px");
     conditionsImage.src = sunny;
 
-    const locationHeader = document.createElement("h1");
+    const locationInfoContainer = document.createElement("div");
+    locationInfoContainer.classList.add("location-info-container");
+
+    const locationHeader = document.createElement("p");
+    locationHeader.classList.add("location-header");
     locationHeader.textContent = `${weatherData.locationName}, ${weatherData.locationRegion}`;
 
-    const temperatureText = document.createElement("h2");
-    temperatureText.textContent = `${weatherData.tempF} °F`;
+    const locationCountry = document.createElement("p");
+    locationCountry.classList.add("location-country");
+    locationCountry.textContent = `${weatherData.locationCountry}, Last Updated: ${weatherData.lastUpdated}`;
 
-    const conditions = document.createElement("h2");
+    const conditionsContainer = document.createElement("div");
+    conditionsContainer.classList.add("conditions-container");
+
+    const conditionsTextContainer = document.createElement("div");
+    conditionsTextContainer.classList.add("conditions-text-container");
+
+    const temperatureText = document.createElement("p");
+    temperatureText.classList.add("temp-text");
+    if (metricToggle.checked === true) {
+      temperatureText.textContent = `${weatherData.tempC} °C`;
+    } else {
+      temperatureText.textContent = `${weatherData.tempF} °F`;
+    }
+
+    const conditions = document.createElement("p");
+    conditions.classList.add("conditions-text");
     conditions.textContent = weatherData.condition;
 
-    weatherContainer.appendChild(conditionsImage);
-    weatherContainer.appendChild(locationHeader);
-    weatherContainer.appendChild(temperatureText);
-    weatherContainer.appendChild(conditions);
+    const conditionsDetailsContainer = document.createElement("div");
+    conditionsDetailsContainer.classList.add("conditions-details-container");
+
+    const feelsLike = document.createElement("p");
+    if (metricToggle.checked === true) {
+      feelsLike.textContent = `Feels Like: ${weatherData.feelsLikeC} °C`;
+    } else {
+      feelsLike.textContent = `Feels Like: ${weatherData.feelsLikeF} °F`;
+    }
+
+    const humidity = document.createElement("p");
+    humidity.textContent = `Humidity: ${weatherData.humidity}%`;
+
+    const wind = document.createElement("p");
+    if (metricToggle.checked === true) {
+      wind.textContent = `Wind: ${weatherData.windKph}kmph ${weatherData.windDirection}`;
+    } else {
+      wind.textContent = `Wind: ${weatherData.windMph}mph ${weatherData.windDirection}`;
+    }
+
+    locationInfoContainer.appendChild(locationHeader);
+    locationInfoContainer.appendChild(locationCountry);
+
+    conditionsTextContainer.appendChild(temperatureText);
+    conditionsTextContainer.appendChild(conditions);
+
+    conditionsDetailsContainer.appendChild(feelsLike);
+    conditionsDetailsContainer.appendChild(humidity);
+    conditionsDetailsContainer.appendChild(wind);
+
+    conditionsContainer.appendChild(conditionsImage);
+    conditionsContainer.appendChild(conditionsTextContainer);
+    conditionsContainer.appendChild(conditionsDetailsContainer);
+
+    weatherContainer.appendChild(locationInfoContainer);
+    weatherContainer.appendChild(conditionsContainer);
   }
 
   function renderDefaultPage() {
-    let location = "Durham";
+    let location = "Raleigh";
     getWeatherData(location).then((weatherData) => {
       renderWeather(weatherData);
+      currentWeatherData = weatherData;
     });
   }
   renderDefaultPage();
