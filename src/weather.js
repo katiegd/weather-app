@@ -19,7 +19,8 @@ import windy from "./assets/windy.svg";
 export async function getWeatherData(location) {
   try {
     const response = await fetch(
-      `http://api.weatherapi.com/v1/current.json?key=3af326277f9b4956958210506240306&q=${location}&aqi=no`,
+      `http://api.weatherapi.com/v1/forecast.json?key=3af326277f9b4956958210506240306&q=${location}&days=6&aqi=no&alerts=no`,
+
       { mode: "cors" }
     );
     const weatherData = await response.json();
@@ -38,6 +39,12 @@ export async function getWeatherData(location) {
     const lastUpdated = weatherData.current.last_updated;
     const humidity = weatherData.current.humidity;
     const isDay = weatherData.current.is_day;
+    const maxTempC = weatherData.forecast.forecastday[0].day.maxtemp_c;
+    const maxTempF = weatherData.forecast.forecastday[0].day.maxtemp_f;
+    const minTempC = weatherData.forecast.forecastday[0].day.mintemp_c;
+    const minTempF = weatherData.forecast.forecastday[0].day.mintemp_f;
+
+    console.log(weatherData);
 
     return {
       tempF,
@@ -54,6 +61,10 @@ export async function getWeatherData(location) {
       lastUpdated,
       humidity,
       isDay,
+      maxTempC,
+      maxTempF,
+      minTempC,
+      minTempF,
     };
   } catch (error) {
     console.log(error);
@@ -67,8 +78,15 @@ export async function getWeatherForecast(location) {
       { mode: "cors" }
     );
     const forecastData = await response.json();
-
-    console.log(forecastData);
+    const forecastDays = forecastData.forecast.forecastday;
+    forecastDays.forEach((day) => {
+      const date = day.date;
+      const maxTempF = day.day.maxtemp_f;
+      const maxTempC = day.day.maxtemp_c;
+      const minTempF = day.day.mintemp_f;
+      const minTempC = day.day.mintemp_c;
+      const condition = day.day.condition.text;
+    });
   } catch (error) {
     console.log(error);
   }

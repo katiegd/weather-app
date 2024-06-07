@@ -189,6 +189,11 @@ input[type="checkbox"] {
   font-size: 2rem;
 }
 
+.max-min-temp {
+  font-size: 1rem;
+  padding-top: 12px;
+}
+
 .conditions-details-container {
   font-size: 0.85rem;
   display: flex;

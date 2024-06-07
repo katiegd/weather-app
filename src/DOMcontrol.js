@@ -183,14 +183,18 @@ export function DOMcontrol() {
     const temperatureText = document.createElement("p");
     temperatureText.classList.add("temp-text");
     if (metricToggle.checked === true) {
-      temperatureText.textContent = `${weatherData.tempC} °C`;
+      temperatureText.textContent = `${weatherData.tempC}°C`;
     } else {
-      temperatureText.textContent = `${weatherData.tempF} °F`;
+      temperatureText.textContent = `${weatherData.tempF}°F`;
     }
 
     const conditions = document.createElement("p");
     conditions.classList.add("conditions-text");
     conditions.textContent = weatherData.condition;
+
+    const maxMinTemp = document.createElement("p");
+    maxMinTemp.classList.add("max-min-temp");
+    maxMinTemp.textContent = `Hi: ${weatherData.maxTempF}°F, Low: ${weatherData.minTempF}°F`;
 
     const conditionsDetailsContainer = document.createElement("div");
     conditionsDetailsContainer.classList.add("conditions-details-container");
@@ -232,6 +236,7 @@ export function DOMcontrol() {
 
     conditionsTextContainer.appendChild(temperatureText);
     conditionsTextContainer.appendChild(conditions);
+    conditionsTextContainer.appendChild(maxMinTemp);
 
     conditionsDetailsCategory.appendChild(feelsLikeCategory);
     conditionsDetailsCategory.appendChild(humidityCategory);
