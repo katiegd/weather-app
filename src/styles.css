@@ -49,7 +49,7 @@ body {
   font-family: "Quicksand", sans-serif;
   font-weight: 900;
   color: var(--darkest-text);
-  padding: 30px;
+  padding: 20px;
   font-size: 3rem;
 }
 
@@ -149,7 +149,6 @@ input[type="checkbox"] {
 .weather-container {
   width: 50%;
   min-width: 475px;
-  margin-top: 50px;
   margin-bottom: 10%;
   padding: 50px;
   border-radius: 3rem;
@@ -339,7 +338,6 @@ header.night-mode {
 .weather-container.night-mode {
   width: 50%;
   min-width: 475px;
-  margin-top: 50px;
   padding: 50px;
   border-radius: 3rem;
   background-color: var(--night-gray);

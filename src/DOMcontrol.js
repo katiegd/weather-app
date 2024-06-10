@@ -14,7 +14,7 @@ export function DOMcontrol() {
   const headerContainer = document.querySelector(".header");
 
   const header = document.createElement("img");
-  header.setAttribute("width", "100px");
+  header.setAttribute("width", "80px");
   header.src = beeIcon;
   const headerName = document.createElement("header");
   headerName.textContent = "weather bee";
