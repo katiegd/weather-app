@@ -133,32 +133,6 @@ export function DOMcontrol() {
     const { condition, isDay } = weatherData;
     const { image } = getWeatherConditionStyle(condition, isDay);
 
-    if (isDay === 0) {
-      document.body.classList.add("night-mode");
-      headerName.classList.add("night-mode");
-      locationContainer.classList.add("night-mode");
-      locationInput.classList.add("night-mode");
-      locationSubmit.classList.add("night-mode");
-      degressContainer.classList.add("night-mode");
-      fButton.classList.add("night-mode");
-      cButton.classList.add("night-mode");
-      toggleLabel.classList.add("night-mode");
-      weatherContainer.classList.add("night-mode");
-      header.src = beeIconNight;
-    } else {
-      document.body.classList.remove("night-mode");
-      headerName.classList.remove("night-mode");
-      locationContainer.classList.remove("night-mode");
-      locationInput.classList.remove("night-mode");
-      locationSubmit.classList.remove("night-mode");
-      degressContainer.classList.remove("night-mode");
-      fButton.classList.remove("night-mode");
-      cButton.classList.remove("night-mode");
-      toggleLabel.classList.remove("night-mode");
-      weatherContainer.classList.remove("night-mode");
-      header.src = beeIcon;
-    }
-
     const conditionsImage = document.createElement("img");
     conditionsImage.setAttribute("width", "130px");
     conditionsImage.src = image;
@@ -226,6 +200,9 @@ export function DOMcontrol() {
     const windCategory = document.createElement("p");
     windCategory.textContent = "Wind:";
 
+    const rainCategory = document.createElement("p");
+    rainCategory.textContent = "Chance of Rain:";
+
     const conditionsDetailsData = document.createElement("div");
     conditionsDetailsData.classList.add("conditions-details-data");
 
@@ -245,6 +222,9 @@ export function DOMcontrol() {
     } else {
       wind.textContent = `${weatherData.windMph}mph ${weatherData.windDirection}`;
     }
+
+    const rainChance = document.createElement("p");
+    rainChance.textContent = `${weatherData.rainChance}%`;
 
     const forecastContainer = document.createElement("div");
     forecastContainer.classList.add("forecast-container");
@@ -288,6 +268,10 @@ export function DOMcontrol() {
         tempLow.textContent = `L: ${day.minTempF} °F`;
       }
 
+      const rainChance = document.createElement("p");
+      rainChance.classList.add("forecast-condition");
+      rainChance.textContent = `Rain: ${day.rainChance}%`;
+
       tempHighLowContainer.appendChild(tempHigh);
       tempHighLowContainer.appendChild(tempLow);
 
@@ -295,6 +279,7 @@ export function DOMcontrol() {
       forecastItem.appendChild(conditionIcon);
       forecastItem.appendChild(conditionText);
       forecastItem.appendChild(tempHighLowContainer);
+      forecastItem.appendChild(rainChance);
 
       forecastContainer.appendChild(forecastItem);
     });
@@ -309,16 +294,14 @@ export function DOMcontrol() {
     conditionsTextContainer.appendChild(conditions);
     conditionsTextContainer.appendChild(maxMinTempContainer);
 
-    conditionsDetailsCategory.appendChild(feelsLikeCategory);
-    conditionsDetailsCategory.appendChild(humidityCategory);
-    conditionsDetailsCategory.appendChild(windCategory);
-
-    conditionsDetailsData.appendChild(feelsLike);
-    conditionsDetailsData.appendChild(humidity);
-    conditionsDetailsData.appendChild(wind);
-
-    conditionsDetailsContainer.appendChild(conditionsDetailsCategory);
-    conditionsDetailsContainer.appendChild(conditionsDetailsData);
+    conditionsDetailsContainer.appendChild(feelsLikeCategory);
+    conditionsDetailsContainer.appendChild(feelsLike);
+    conditionsDetailsContainer.appendChild(humidityCategory);
+    conditionsDetailsContainer.appendChild(humidity);
+    conditionsDetailsContainer.appendChild(windCategory);
+    conditionsDetailsContainer.appendChild(wind);
+    conditionsDetailsContainer.appendChild(rainCategory);
+    conditionsDetailsContainer.appendChild(rainChance);
 
     conditionsContainer.appendChild(conditionsImage);
     conditionsContainer.appendChild(conditionsTextContainer);
@@ -327,17 +310,42 @@ export function DOMcontrol() {
     weatherContainer.appendChild(locationInfoContainer);
     weatherContainer.appendChild(conditionsContainer);
     weatherContainer.appendChild(forecastContainer);
+
+    if (isDay === 0) {
+      document.body.classList.add("night-mode");
+      headerName.classList.add("night-mode");
+      locationContainer.classList.add("night-mode");
+      locationInput.classList.add("night-mode");
+      locationSubmit.classList.add("night-mode");
+      degressContainer.classList.add("night-mode");
+      fButton.classList.add("night-mode");
+      cButton.classList.add("night-mode");
+      toggleLabel.classList.add("night-mode");
+      weatherContainer.classList.add("night-mode");
+      forecastContainer.classList.add("night-mode");
+      header.src = beeIconNight;
+    } else {
+      document.body.classList.remove("night-mode");
+      headerName.classList.remove("night-mode");
+      locationContainer.classList.remove("night-mode");
+      locationInput.classList.remove("night-mode");
+      locationSubmit.classList.remove("night-mode");
+      degressContainer.classList.remove("night-mode");
+      fButton.classList.remove("night-mode");
+      cButton.classList.remove("night-mode");
+      toggleLabel.classList.remove("night-mode");
+      weatherContainer.classList.remove("night-mode");
+      header.src = beeIcon;
+    }
   }
 
   // Renders a default location on page load
   function renderDefaultPage() {
-    let location = "Raleigh";
+    let location = "London";
     getWeatherData(location).then((weatherData) => {
       renderWeather(weatherData);
       currentWeatherData = weatherData;
     });
   }
   renderDefaultPage();
-  let location = "Raleigh";
-  getWeatherForecast(location);
 }

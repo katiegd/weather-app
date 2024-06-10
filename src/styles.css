@@ -214,15 +214,11 @@ input[type="checkbox"] {
 
 .conditions-details-container {
   font-size: 0.85rem;
-  display: flex;
-  line-height: 2rem;
+  display: grid;
+  min-width: 205px;
+  grid-template-columns: 120px 85px;
+  gap: 10px;
   justify-items: end;
-}
-
-.conditions-details-data {
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-align: right;
 }
 
 .forecast-container {
@@ -346,4 +342,14 @@ header.night-mode {
   color: var(--night-text);
   display: grid;
   grid-template-rows: 1fr 3fr;
+}
+
+.forecast-container.night-mode {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #00000042;
+  border-radius: 1rem;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  justify-items: center;
 }

@@ -24,7 +24,7 @@ export async function getWeatherData(location) {
       { mode: "cors" }
     );
     const weatherData = await response.json();
-
+    console.log(weatherData);
     const locationName = weatherData.location.name;
     const locationRegion = weatherData.location.region;
     const locationCountry = weatherData.location.country;
@@ -43,6 +43,8 @@ export async function getWeatherData(location) {
     const maxTempF = weatherData.forecast.forecastday[0].day.maxtemp_f;
     const minTempC = weatherData.forecast.forecastday[0].day.mintemp_c;
     const minTempF = weatherData.forecast.forecastday[0].day.mintemp_f;
+    const rainChance =
+      weatherData.forecast.forecastday[0].day.daily_chance_of_rain;
 
     const forecastDays = weatherData.forecast.forecastday.map((day) => {
       const date = day.date;
@@ -52,6 +54,7 @@ export async function getWeatherData(location) {
       const minTempF = day.day.mintemp_f;
       const minTempC = day.day.mintemp_c;
       const condition = day.day.condition.text;
+      const rainChance = day.day.daily_chance_of_rain;
 
       return {
         formattedDate,
@@ -60,6 +63,7 @@ export async function getWeatherData(location) {
         minTempF,
         minTempC,
         condition,
+        rainChance,
       };
     });
 
@@ -83,6 +87,7 @@ export async function getWeatherData(location) {
       minTempC,
       minTempF,
       forecastDays,
+      rainChance,
     };
   } catch (error) {
     console.log(error);
