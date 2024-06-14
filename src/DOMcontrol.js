@@ -146,7 +146,11 @@ export function DOMcontrol() {
 
     const locationCountry = document.createElement("p");
     locationCountry.classList.add("location-country");
-    locationCountry.textContent = `${weatherData.locationCountry}, Last Updated: ${weatherData.lastUpdated}`;
+    locationCountry.textContent = `${weatherData.locationCountry}`;
+
+    const lastUpdated = document.createElement("p");
+    lastUpdated.classList.add("last-updated");
+    lastUpdated.textContent = `Last Updated: ${weatherData.lastUpdatedFormatted}`;
 
     const conditionsContainer = document.createElement("div");
     conditionsContainer.classList.add("conditions-container");
@@ -245,6 +249,10 @@ export function DOMcontrol() {
       const { image } = getWeatherConditionStyle(condition, isDay);
       conditionIcon.src = image;
 
+      const dayOfWeek = document.createElement("p");
+      dayOfWeek.classList.add("forecast-day");
+      dayOfWeek.textContent = day.dayOfWeek;
+
       const date = document.createElement("p");
       date.classList.add("forecast-date");
       date.textContent = day.formattedDate;
@@ -279,6 +287,7 @@ export function DOMcontrol() {
       tempHighLowContainer.appendChild(tempHigh);
       tempHighLowContainer.appendChild(tempLow);
 
+      forecastItem.appendChild(dayOfWeek);
       forecastItem.appendChild(date);
       forecastItem.appendChild(conditionIcon);
       forecastItem.appendChild(conditionText);
@@ -290,6 +299,7 @@ export function DOMcontrol() {
 
     locationInfoContainer.appendChild(locationHeader);
     locationInfoContainer.appendChild(locationCountry);
+    locationInfoContainer.appendChild(lastUpdated);
 
     maxMinTempContainer.appendChild(maxMinTempHi);
     maxMinTempContainer.appendChild(maxMinTempLow);

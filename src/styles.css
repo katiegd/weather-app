@@ -172,7 +172,12 @@ input[type="checkbox"] {
 
 .location-country {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
+}
+
+.last-updated {
+  margin: 0;
+  font-size: 0.75rem;
 }
 
 .conditions-container {
@@ -196,7 +201,7 @@ input[type="checkbox"] {
 
 .conditions-text-container {
   text-align: center;
-  font-size: 2rem;
+  font-size: 1.3rem;
 }
 
 .max-min-temp-container {
@@ -230,6 +235,7 @@ input[type="checkbox"] {
   justify-items: center;
 }
 
+.forecast-day,
 .forecast-date,
 .forecast-condition {
   font-size: 0.7rem;
@@ -383,7 +389,8 @@ header.night-mode {
 
   .weather-container {
     max-width: 400px;
-    width: 70%;
+    width: 85%;
+    padding: 8%;
   }
 
   .conditions-container img {

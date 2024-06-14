@@ -37,6 +37,7 @@ export async function getWeatherData(location) {
     const windKph = weatherData.current.wind_kph;
     const condition = weatherData.current.condition.text;
     const lastUpdated = weatherData.current.last_updated;
+    const lastUpdatedFormatted = formattedDateTime(lastUpdated);
     const humidity = weatherData.current.humidity;
     const isDay = weatherData.current.is_day;
     const maxTempC = weatherData.forecast.forecastday[0].day.maxtemp_c;
@@ -49,6 +50,7 @@ export async function getWeatherData(location) {
     const forecastDays = weatherData.forecast.forecastday.map((day) => {
       const date = day.date;
       const formattedDate = formatDate(date);
+      const dayOfWeek = getDayOfWeek(date);
       const maxTempF = day.day.maxtemp_f;
       const maxTempC = day.day.maxtemp_c;
       const minTempF = day.day.mintemp_f;
@@ -64,6 +66,7 @@ export async function getWeatherData(location) {
         minTempC,
         condition,
         rainChance,
+        dayOfWeek,
       };
     });
 
@@ -79,7 +82,7 @@ export async function getWeatherData(location) {
       windDirection,
       windMph,
       windKph,
-      lastUpdated,
+      lastUpdatedFormatted,
       humidity,
       isDay,
       maxTempC,
@@ -96,10 +99,33 @@ export async function getWeatherData(location) {
 
 function formatDate(dateString) {
   const date = new Date(dateString);
+  date.setDate(date.getDate() + 1);
   const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
 
   return `${month}/${day}`;
+}
+
+function formattedDateTime(lastUpdated) {
+  const date = new Date(lastUpdated);
+  const options = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  };
+  return date.toLocaleString("en-US", options);
+}
+
+function getDayOfWeek(dateString) {
+  const date = new Date(dateString);
+  date.setDate(date.getDate() + 1);
+  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thurs", "Fri", "Sat"];
+  const dayOfWeek = date.getDay();
+
+  return daysOfWeek[dayOfWeek];
 }
 
 // Object map containing different styles based on weather/time of day.
