@@ -57,7 +57,7 @@ body {
   padding: 10px 10px;
   display: flex;
   align-items: center;
-  width: 30%;
+  width: 50%;
   gap: 5px;
   grid-column: 2;
 }
@@ -148,7 +148,6 @@ input[type="checkbox"] {
 
 .weather-container {
   width: 50%;
-  min-width: 475px;
   margin-bottom: 10%;
   padding: 50px;
   border-radius: 3rem;
@@ -352,4 +351,69 @@ header.night-mode {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   justify-items: center;
+}
+
+@media (max-width: 1015px) {
+  .header > img {
+    max-width: 70px;
+    width: 20%;
+  }
+  .header {
+    width: 80%;
+    font-size: 2rem;
+    flex-wrap: nowrap;
+  }
+
+  .location-container {
+    max-width: 518px;
+    width: 80%;
+  }
+
+  .location-header {
+    font-size: 1.3rem;
+  }
+
+  .temp-text {
+    font-size: 2.5rem;
+  }
+
+  .conditions-text {
+    font-size: 1.1rem;
+  }
+
+  .weather-container {
+    max-width: 400px;
+    width: 70%;
+  }
+
+  .conditions-container img {
+    width: 90%;
+  }
+
+  .conditions-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+  }
+
+  .conditions-details-container {
+    grid-column: 1/-1;
+    grid-template-columns: 1fr 1fr;
+    gap: 0px;
+    width: 90%;
+    justify-content: left;
+    justify-items: left;
+  }
+  .conditions-details-container .right {
+    justify-self: end;
+  }
+
+  .forecast-container {
+    max-width: 400px;
+    overflow-x: auto;
+    gap: 10px;
+  }
+
+  .forecast-item {
+    width: 120px;
+  }
 }

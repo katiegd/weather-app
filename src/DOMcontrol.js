@@ -207,6 +207,7 @@ export function DOMcontrol() {
     conditionsDetailsData.classList.add("conditions-details-data");
 
     const feelsLike = document.createElement("p");
+    feelsLike.classList.add("right");
     if (metricToggle.checked === true) {
       feelsLike.textContent = `${weatherData.feelsLikeC} °C`;
     } else {
@@ -214,9 +215,11 @@ export function DOMcontrol() {
     }
 
     const humidity = document.createElement("p");
+    humidity.classList.add("right");
     humidity.textContent = `${weatherData.humidity}%`;
 
     const wind = document.createElement("p");
+    wind.classList.add("right");
     if (metricToggle.checked === true) {
       wind.textContent = `${weatherData.windKph}kph ${weatherData.windDirection}`;
     } else {
@@ -224,6 +227,7 @@ export function DOMcontrol() {
     }
 
     const rainChance = document.createElement("p");
+    rainChance.classList.add("right");
     rainChance.textContent = `${weatherData.rainChance}%`;
 
     const forecastContainer = document.createElement("div");
