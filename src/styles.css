@@ -338,7 +338,6 @@ header.night-mode {
 
 .weather-container.night-mode {
   width: 50%;
-  min-width: 475px;
   padding: 50px;
   border-radius: 3rem;
   background-color: var(--night-gray);
@@ -421,6 +420,70 @@ header.night-mode {
   }
 
   .forecast-item {
+    width: 120px;
+  }
+
+  .header.night-mode > img {
+    max-width: 70px;
+    width: 20%;
+  }
+  .header.night-mode {
+    width: 80%;
+    font-size: 2rem;
+    flex-wrap: nowrap;
+  }
+
+  .location-container.night-mode {
+    max-width: 518px;
+    width: 80%;
+  }
+
+  .location-header.night-mode {
+    font-size: 1.3rem;
+  }
+
+  .temp-text.night-mode {
+    font-size: 2.5rem;
+  }
+
+  .conditions-text.night-mode {
+    font-size: 1.1rem;
+  }
+
+  .weather-container.night-mode {
+    max-width: 400px;
+    width: 85%;
+    padding: 8%;
+  }
+
+  .conditions-container.night-mode img {
+    width: 90%;
+  }
+
+  .conditions-container.night-mode {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+  }
+
+  .conditions-details-container.night-mode {
+    grid-column: 1/-1;
+    grid-template-columns: 1fr 1fr;
+    gap: 0px;
+    width: 90%;
+    justify-content: left;
+    justify-items: left;
+  }
+  .conditions-details-container.night-mode .right {
+    justify-self: end;
+  }
+
+  .forecast-container.night-mode {
+    max-width: 400px;
+    overflow-x: auto;
+    gap: 10px;
+  }
+
+  .forecast-item.night-mode {
     width: 120px;
   }
 }
